@@ -21,7 +21,10 @@ class Hot extends React.Component {
 
   extract(nodes, level) {
     return nodes.map(node => {
-      const m = Object.assign({level: level}, node);
+      const m = Object.assign({}, node, {
+        level: level,
+        name: '│'.repeat(Math.max(0, level-1)) + ((level>0)?'└':'') + node.name
+      })
       if (m.type === 'branch') {
         if(m.opened) {
           return [m, this.extract(m.children, level + 1)]
@@ -40,7 +43,7 @@ class Hot extends React.Component {
       <div id="example">
         <HotTable root="hot"
                   settings={{
-                    data: flatten(this.extract(nodes)),
+                    data: flatten(this.extract(nodes, 0)),
                     manualRowMove: true,
                     columns: [
                       {
@@ -50,6 +53,7 @@ class Hot extends React.Component {
                       },
                       {
                         data: 'name',
+                        readOnly: true,
                         renderer: 'text'
                       }
                     ]
