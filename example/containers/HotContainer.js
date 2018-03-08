@@ -4,7 +4,7 @@ import Hot from '../components/Hot'
 
 const mapStateToProps = state => {
   return {
-    nodes: state.nodes
+    nodes: state.tree.nodes
   }
 }
 

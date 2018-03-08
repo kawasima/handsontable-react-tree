@@ -7,17 +7,17 @@ class BranchCell extends React.Component {
   }
 
   render() {
-    const { value, onCellClick } = this.props;
+    const { value, onNodeClick } = this.props;
     return (
-      <a onClick={() => console.log('click')}
+      <a onClick={() => onNodeClick(value) }
         onDoubleClick={() => console.log('double click')}>{value}</a>
     )
   }
 }
 
 BranchCell.propTypes = {
-  value: PropTypes.string.isRequired,
-  onCellClick: PropTypes.func.isRequired
+  value: PropTypes.number.isRequired,
+  onNodeClick: PropTypes.func.isRequired
 };
 
 export default BranchCell
