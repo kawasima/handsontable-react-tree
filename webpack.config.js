@@ -29,6 +29,7 @@ module.exports = {
       new webpack.NoEmitOnErrorsPlugin(),
       new webpack.HotModuleReplacementPlugin()
     ]),
+  devtool: process.env.NODE_ENV === 'production' ? false : 'cheap-module-eval-source-map',
   module: {
     rules: [
       {

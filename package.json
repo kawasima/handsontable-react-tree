@@ -4,7 +4,7 @@
   "description": "Tree feature for handsontable",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --port=3355 --hot",
+    "start": "webpack-dev-server --port=3355 --hot --mode development",
     "build": "make"
   },
   "author": "kawasima",

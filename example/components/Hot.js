@@ -27,10 +27,10 @@ class Hot extends React.Component {
         if(m.opened) {
           return [m, this.extract(m.children, level + 1)]
         } else {
-          return m;
+          return m
         }
       } else {
-        return m;
+        return m
       }
     });
   }

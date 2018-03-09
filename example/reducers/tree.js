@@ -28,8 +28,7 @@ const tree = (state = [], action) => {
                       return Object.assign({}, node, {children: node.children.concat(action.sources) })
                     }
                     return node;
-                  }
-                         )
+                  })
     console.log(newNodes)
     return Object.assign({}, state, {
       nodes: newNodes
