@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { toggleNode } from '../actions'
+import { toggleNode, moveNodes } from '../actions'
 import Hot from '../components/Hot'
 
 const mapStateToProps = state => {
@@ -12,6 +12,9 @@ const mapDispatchToProps = dispatch => {
   return {
     onNodeClick: id => {
       dispatch(toggleNode(id))
+    },
+    onMoveNodes: (sources, target) => {
+      dispatch(moveNodes(sources, target))
     }
   }
 }

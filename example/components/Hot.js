@@ -15,16 +15,14 @@ class Hot extends React.Component {
 
   treeRenderer(instance, td, row, col, prop, value) {
     const { onNodeClick } = this.props
-    ReactDOM.render(<BranchCell value={value} onNodeClick={onNodeClick}/>, td);
+    const node = instance.getSourceDataAtRow(row)
+    ReactDOM.render(<BranchCell node={node} onNodeClick={onNodeClick}/>, td);
     return td;
   }
 
   extract(nodes, level) {
     return nodes.map(node => {
-      const m = Object.assign({}, node, {
-        level: level,
-        name: '│'.repeat(Math.max(0, level-1)) + ((level>0)?'└':'') + node.name
-      })
+      const m = Object.assign({}, node, {level: level})
       if (m.type === 'branch') {
         if(m.opened) {
           return [m, this.extract(m.children, level + 1)]
@@ -38,7 +36,7 @@ class Hot extends React.Component {
   }
 
   render() {
-    const { nodes } = this.props;
+    const { nodes, onMoveNodes } = this.props;
     return (
       <div id="example">
         <HotTable root="hot"
@@ -56,7 +54,19 @@ class Hot extends React.Component {
                         readOnly: true,
                         renderer: 'text'
                       }
-                    ]
+                    ],
+                    colWidths: [150, 50],
+                    beforeRowMove: function(rows, target) {
+                      if (this.getSourceDataAtRow(target - 1).type != 'branch'
+                          || !rows.every(r => this.getSourceDataAtRow(r).type == 'leaf')) {
+                        return false
+                      }
+                      return false
+                    },
+                    afterRowMove: function(rows, target) {
+                      onMoveNodes(rows.map(r => this.getSourceDataAtRow(r)),
+                                  this.getSourceDataAtRow(target - 1).id)
+                    }
           }}
           colHeaders={true}
           rowHeaders={true}
@@ -67,7 +77,8 @@ class Hot extends React.Component {
 
 Hot.propTypes = {
   nodes: PropTypes.array.isRequired,
-  onNodeClick: PropTypes.func.isRequired
+  onNodeClick: PropTypes.func.isRequired,
+  onMoveNodes: PropTypes.func.isRequired
 }
 
 export default Hot

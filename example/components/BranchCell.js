@@ -1,22 +1,38 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+
 class BranchCell extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const { value, onNodeClick } = this.props;
+    const { node, onNodeClick } = this.props;
+    const openClosed = () => {
+      if (typeof node.opened === 'undefined') {
+        return null
+      }
+      return <span>{node.opened?'▼':'▶'}</span>
+    }
+
     return (
-      <a onClick={() => onNodeClick(value) }
-        onDoubleClick={() => console.log('double click')}>{value}</a>
+      <a style={{ cursor: 'pointer'}}
+         onClick={() => {
+           if (node.type == 'branch') onNodeClick(node.id)
+          }
+        }
+        onDoubleClick={() => console.log('double click')}>
+        {'　'.repeat(node.level)}
+        {openClosed()}
+        {node.name}
+      </a>
     )
   }
 }
 
 BranchCell.propTypes = {
-  value: PropTypes.number.isRequired,
+  node: PropTypes.object.isRequired,
   onNodeClick: PropTypes.func.isRequired
 };
 
