@@ -20,16 +20,13 @@ const tree = (state = [], action) => {
         return (node.id === action.id) ? {...node, opened: !node.opened} : node}
                  )})
   case 'MOVE_NODES':
-
     const sourceIds = action.sources.map(s => s.id)
-    const newNodes = walk(removeWalk(state.nodes, sourceIds),
-                  node => {
-                    if (node.id === action.target) {
-                      return Object.assign({}, node, {children: node.children.concat(action.sources) })
-                    }
-                    return node;
-                  })
-    console.log(newNodes)
+    const newNodes = walk(removeWalk(state.nodes, sourceIds), node => {
+      if (node.id === action.targetBranch) {
+        Array.prototype.splice.apply(node.children, [action.insertPosition, 0].concat(action.sources))
+      }
+      return node
+    })
     return Object.assign({}, state, {
       nodes: newNodes
     })

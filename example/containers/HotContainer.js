@@ -13,8 +13,8 @@ const mapDispatchToProps = dispatch => {
     onNodeClick: id => {
       dispatch(toggleNode(id))
     },
-    onMoveNodes: (sources, target) => {
-      dispatch(moveNodes(sources, target))
+    onMoveNodes: (sources, targetBranch, insertPosition) => {
+      dispatch(moveNodes(sources, targetBranch, insertPosition))
     }
   }
 }

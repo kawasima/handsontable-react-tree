@@ -1,8 +1,9 @@
-export const moveNodes = (sources, target) => {
+export const moveNodes = (sources, targetBranch, insertPosition) => {
   return {
     type: 'MOVE_NODES',
     sources: sources,
-    target: target
+    targetBranch: targetBranch,
+    insertPosition: insertPosition
   }
 }
 

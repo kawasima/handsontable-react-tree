@@ -6,7 +6,19 @@ import BranchCell from './BranchCell'
 
 const flatten = list => list.reduce(
     (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
-);
+)
+
+const findParentNode = (nodes, id) => {
+  let ret
+  for (let [i, n] of nodes.entries()) {
+    if (n.children) {
+      const idx = n.children.findIndex(el => el.id === id)
+      ret = (idx >=0) ? [n, idx + 1] : findParentNode(n.children, id)
+      if (ret) break
+    }
+  }
+  return ret
+}
 
 class Hot extends React.Component {
   constructor(props) {
@@ -57,15 +69,22 @@ class Hot extends React.Component {
                     ],
                     colWidths: [150, 50],
                     beforeRowMove: function(rows, target) {
-                      if (this.getSourceDataAtRow(target - 1).type != 'branch'
-                          || !rows.every(r => this.getSourceDataAtRow(r).type == 'leaf')) {
-                        return false
-                      }
+                      // Disable the default action
                       return false
                     },
                     afterRowMove: function(rows, target) {
+                      if (target == 0
+                          || !rows.every(r => this.getSourceDataAtRow(r).type == 'leaf')) {
+                        return false
+                      }
+                      const targetNode = this.getSourceDataAtRow(target-1)
+                      let targetBranch = targetNode
+                      let insertPosition = 0
+                      if (targetNode.type === 'leaf') {
+                        [targetBranch, insertPosition] = (findParentNode(nodes, targetNode.id) || [null, 0])
+                      }
                       onMoveNodes(rows.map(r => this.getSourceDataAtRow(r)),
-                                  this.getSourceDataAtRow(target - 1).id)
+                                  targetBranch.id, insertPosition)
                     }
           }}
           colHeaders={true}
