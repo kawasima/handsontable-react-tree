@@ -85,6 +85,7 @@ class Hot extends React.Component {
                       }
                       onMoveNodes(rows.map(r => this.getSourceDataAtRow(r)),
                                   targetBranch.id, insertPosition)
+                      return true
                     }
           }}
           colHeaders={true}

@@ -15,10 +15,11 @@ function removeWalk(nodes, targets) {
 const tree = (state = [], action) => {
   switch (action.type) {
   case 'TOGGLE_NODE':
-    return Object.assign({}, state, {
-      nodes: walk(state.nodes, node => {
-        return (node.id === action.id) ? {...node, opened: !node.opened} : node}
-                 )})
+    return { ...state,
+             nodes: walk(state.nodes, node => {
+               return (node.id === action.id) ? {...node, opened: !node.opened} : node
+             })
+           }
   case 'MOVE_NODES':
     const sourceIds = action.sources.map(s => s.id)
     const newNodes = walk(removeWalk(state.nodes, sourceIds), node => {
@@ -27,9 +28,7 @@ const tree = (state = [], action) => {
       }
       return node
     })
-    return Object.assign({}, state, {
-      nodes: newNodes
-    })
+    return { ...state, nodes: newNodes }
   default:
     return state
   }

@@ -13,7 +13,10 @@ class BranchCell extends React.Component {
       if (typeof node.opened === 'undefined') {
         return null
       }
-      return <span>{node.opened?'▼':'▶'}</span>
+      return node.opened ?
+        <i className="fa fa-caret-down"></i>
+        :
+        <i className="fa fa-caret-right"></i>
     }
 
     return (
