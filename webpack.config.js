@@ -13,7 +13,7 @@ module.exports = {
     ]
     : [
       'react-hot-loader/patch',
-      'webpack-dev-server/client?http://localhost:3355',
+      'webpack-dev-server/client?http://localhost:' + (process.env['PORT'] || 3355),
       'webpack/hot/only-dev-server',
       './example/app.js'
     ],
@@ -30,6 +30,10 @@ module.exports = {
       new webpack.HotModuleReplacementPlugin()
     ]),
   devtool: process.env.NODE_ENV === 'production' ? false : 'cheap-module-eval-source-map',
+  devServer: {
+    host: '0.0.0.0',
+    disableHostCheck: true
+  },
   module: {
     rules: [
       {

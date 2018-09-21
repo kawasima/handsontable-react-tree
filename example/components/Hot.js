@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import HotTable from 'react-handsontable'
 import PropTypes from 'prop-types'
 import BranchCell from './BranchCell'
@@ -23,12 +24,14 @@ const findParentNode = (nodes, id) => {
 class Hot extends React.Component {
   constructor(props) {
     super(props);
+    this.renderedTD = new Set()
   }
 
   treeRenderer(instance, td, row, col, prop, value) {
     const { onNodeClick } = this.props
     const node = instance.getSourceDataAtRow(row)
     ReactDOM.render(<BranchCell node={node} onNodeClick={onNodeClick}/>, td);
+    this.renderedTD.add(td)
     return td;
   }
 
@@ -49,6 +52,7 @@ class Hot extends React.Component {
 
   render() {
     const { nodes, onMoveNodes } = this.props;
+    const self = this
     return (
       <div id="example">
         <HotTable root="hot"
@@ -68,6 +72,21 @@ class Hot extends React.Component {
                       }
                     ],
                     colWidths: [150, 50],
+                    afterUpdateSettings: function() {
+                      const root = ReactDOM.findDOMNode(self)
+                      const removed = []
+                      self.renderedTD
+                        .forEach(td => {
+                          if (!root.contains(td)) {
+                            removed.push(td)
+                          }
+                        })
+                      removed
+                        .forEach(td => {
+                          ReactDOM.unmountComponentAtNode(td)
+                          self.renderedTD.delete(td)
+                        })
+                    },
                     beforeRowMove: function(rows, target) {
                       // Disable the default action
                       return false
